@@ -77,7 +77,16 @@ contract stakingContract is Ownable {
     }
 
     function transferStakingReward() public onlyOwner {
+        // check total amount of tokens to be transfered
+        require(treasury >=  stakingReward * nftHolders.length, "Insufficient Amount");
+        require(nftHolders.length > 0, "No addresses provided");
         
+        // How to calculate Staking reward
+        for (uint256 i = 0; i < nftHolders.length; i++) {
+            address payable recipient = payable(nftHolders[i]);
+            recipient.transfer(stakingReward);
+        }
+
     }
 
     event TransferReward(address indexed receiver, uint256 amount);
