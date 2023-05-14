@@ -4,11 +4,16 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract stakingContract is Ownable {
+
+    // Try to do this in Mapping
+
     // function to  Add whiteList addresses
     // function to transfer tokens to white list address
     // function to add tokens into treasury
 
-    uint256[] public nftHolders;
+    address[] public nftHolders;
+
+    uint256 stakingReward; 
 
     uint256 treasury;
 
@@ -33,8 +38,8 @@ contract stakingContract is Ownable {
 
 
     // Function to Add Single NFT Holder Adddress
-    function addSingleNftHolder(uint256 _number) public onlyOwner {
-        nftHolders.push(_number);
+    function addSingleNftHolder(address _singleNftHolder) public onlyOwner {
+        nftHolders.push(_singleNftHolder);
     }
 
     // Function will return total number of NFT Holders 
@@ -43,7 +48,7 @@ contract stakingContract is Ownable {
     }
 
     // Remove NFT Holdere from the array by index
-    function removeNumber(uint256 _index) public onlyOwner {
+    function removeNftHolder(uint256 _index) public onlyOwner {
         require(_index < nftHolders.length, "Index out of bounds");
         for (uint256 i = _index; i < nftHolders.length - 1; i++) {
             nftHolders[i] = nftHolders[i + 1];
@@ -52,10 +57,28 @@ contract stakingContract is Ownable {
     }
 
     // Function to show All NFT Holders
-    function showAllNftHolders () view public  returns ( uint256[] memory) {
+    function showAllNftHolders () view public  returns ( address[] memory) {
         return nftHolders;
     }
+    
+    function addNftHoldersInBulk (address[] memory _nftHolders ) public onlyOwner {
+        
+        for (uint i = 0; i < _nftHolders.length; i++) {
+            nftHolders.push(_nftHolders[i]);
+        }
 
+    }
+
+    function  changestakingReward (uint256 _stakingReward) public onlyOwner {
+        
+        require(_stakingReward != 0, "Invalid Amount");
+        stakingReward = _stakingReward;
+
+    }
+
+    function transferStakingReward() public onlyOwner {
+        
+    }
 
     event TransferReward(address indexed receiver, uint256 amount);
 }
